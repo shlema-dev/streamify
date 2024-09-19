@@ -17,14 +17,14 @@ export function MobileSidebar() {
       <DrawerTrigger asChild>
         <Button
           variant="outline"
-          className="h-10 w-10 rounded-full bg-card border-neutral-100"
+          className="h-10 w-10 rounded-full bg-popover border-neutral-100"
         >
           <div className="h-5 w-5 flex justify-center items-center text-neutral-100">
             <Menu />
           </div>
         </Button>
       </DrawerTrigger>
-      <DrawerContent className="h-screen top-0 left-0 right-auto mt-0 w-full rounded-none border-none bg-card">
+      <DrawerContent className="h-screen top-0 left-0 right-auto mt-0 w-full rounded-none border-none bg-popover">
         <div className="mx-auto w-full h-full max-w-sm flex flex-col justify-between">
           <DrawerHeader>
             <SidebarUser />
@@ -36,7 +36,7 @@ export function MobileSidebar() {
             <DrawerClose asChild>
               <Button
                 variant="outline"
-                className="h-10 w-10 rounded-full border-card-foreground self-center bg-transparent"
+                className="h-10 w-10 rounded-full border-popover-foreground self-center bg-transparent"
               >
                 <div className="h-5 w-5 flex justify-center items-center">
                   <X />

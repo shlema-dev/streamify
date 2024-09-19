@@ -13,8 +13,8 @@ import { ArtistAvatar } from "../ArtistAvatar";
 export default function KeyMetrics() {
   return (
     <>
-      <h1 className="text-2xl font-bold mb-6">Key Metrics</h1>
-      <div className="w-full flex flex-col md:flex-row md:flex-wrap just items-center md:items-start gap-4">
+      <h1 className="text-2xl font-bold mb-6">Overview</h1>
+      <div className="w-full flex flex-col md:flex-row md:flex-wrap just items-center md:items-start gap-8">
         <MetricsCard
           title="Total Users"
           icon={<Users />}

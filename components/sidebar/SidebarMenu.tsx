@@ -16,7 +16,7 @@ export default function SidebarMenu() {
   ];
 
   return (
-    <Command className="bg-card md:bg-card text-foreground hover:bg rounded-lg grow overflow-visible">
+    <Command className="bg-popover text-popover-foreground rounded-lg grow overflow-visible">
       <CommandList className="overflow-visible">
         {menuList.map((menu: any, key: number) => (
           <CommandItem key={key} className={`my-2 flex gap-2`}>
