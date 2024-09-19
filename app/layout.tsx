@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Sidebar from "@/components/Sidebar";
-import { MobileSidebar } from "@/components/MobileSidebar";
+import Sidebar from "@/components/sidebar/Sidebar";
+import { MobileSidebar } from "@/components/sidebar/MobileSidebar";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,15 +15,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`flex items-start justify-between antialiased`}>
-        <div className="md:hidden w-full fixed top-0 py-4 px-4 flex justify-between items-center bg-primary">
-          <h1 className="font-bold text-lg">Streamify</h1>
+      <body className={`flex items-start antialiased`}>
+        <div className="lg:hidden w-full fixed top-0 py-4 px-4 flex justify-between items-center bg-card">
+          <h1 className="font-bold text-2xl text-primary">Streamify</h1>
           <MobileSidebar />
         </div>
-        <div className="hidden md:flex min-w-[300px] border-r border-neutral-600 min-h-screen">
+        <div className="hidden lg:flex min-w-[300px] border-r border-neutral-600 min-h-screen">
           <Sidebar />
         </div>
-        <main className="w-full h-full p-4">{children}</main>
+        <main className="max-w-7xl mx-auto h-full p-4">{children}</main>
       </body>
     </html>
   );

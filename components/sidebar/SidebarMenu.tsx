@@ -1,5 +1,4 @@
 import { ChartPie, House, Paintbrush, TrendingUp } from "lucide-react";
-
 import { Command, CommandItem, CommandList } from "@/components/ui/command";
 
 type MenuItem = {
@@ -17,10 +16,10 @@ export default function SidebarMenu() {
   ];
 
   return (
-    <Command className="bg-background text-foreground hover:bg rounded-lg shadow-md grow overflow-visible">
+    <Command className="bg-card md:bg-card text-foreground hover:bg rounded-lg grow overflow-visible">
       <CommandList className="overflow-visible">
         {menuList.map((menu: any, key: number) => (
-          <CommandItem key={key} className={`my-2 flex gap-2`} >
+          <CommandItem key={key} className={`my-2 flex gap-2`}>
             {menu.icon}
             {menu.title}
           </CommandItem>
