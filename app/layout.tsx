@@ -16,11 +16,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`flex items-start antialiased`}>
-        <div className="lg:hidden w-full fixed z-10 top-0 py-4 px-4 flex justify-between items-center bg-popover">
+        <div className="xl:hidden w-full fixed z-10 top-0 py-4 pl-6 pr-10 flex justify-between items-center bg-popover">
           <h1 className="font-bold text-2xl text-primary">Streamify</h1>
           <MobileSidebar />
         </div>
-        <div className="hidden lg:flex min-w-[300px] min-h-screen">
+        <div className="hidden xl:flex min-w-[300px] min-h-screen">
           <Sidebar />
         </div>
         <main className="max-w-7xl mx-auto h-full p-4">{children}</main>

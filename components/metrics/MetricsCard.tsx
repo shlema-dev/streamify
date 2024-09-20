@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Card,
   CardContent,
@@ -5,13 +7,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { CountAnimation } from "../ui/CountAnimation";
 
 interface MetricsCardProps {
   title: string;
   icon: React.ReactNode;
   description: string;
-  value: string;
+  value: number;
   change?: string;
+  type?: string;
 }
 
 export default function MetricsCard({
@@ -20,6 +24,7 @@ export default function MetricsCard({
   description,
   value,
   change,
+  type = "default",
 }: MetricsCardProps) {
   return (
     <Card className="w-[350px] border-none">
@@ -34,7 +39,10 @@ export default function MetricsCard({
       </CardHeader>
       <CardContent>
         <div className="flex flex-col">
-          <p className="text-2xl text-primary font-bold">{value}</p>
+          <p className="text-2xl text-primary font-bold">
+            {type === "revenue" && "$"}
+            <CountAnimation endValue={value} />
+          </p>
           <p className="text-sm text-muted-foreground">{change}</p>
         </div>
       </CardContent>

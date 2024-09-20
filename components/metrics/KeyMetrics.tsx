@@ -19,29 +19,30 @@ export default function KeyMetrics() {
           title="Total Users"
           icon={<Users />}
           description="Number of registered users on platform."
-          value="3,774,895"
+          value={3774895}
           change="+36% from last month"
         />
         <MetricsCard
           title="Active Users"
           icon={<UserCheck />}
           description="Users active in the last month."
-          value="2,837,560"
+          value={2837560}
           change="+28% from last month"
         />
         <MetricsCard
           title="Total Streams"
           icon={<Activity />}
           description="Number of streams on platform."
-          value="12,434,478"
+          value={12434478}
           change="+17% from last month"
         />
         <MetricsCard
           title="Revenue"
           icon={<DollarSign />}
           description="Total revenue from all sources."
-          value="$4,774,895"
+          value={4774895}
           change="+44% from last month"
+          type="revenue"
         />
         <ArtistCard
           title="Top Artist"
@@ -49,7 +50,7 @@ export default function KeyMetrics() {
           artist="Beatz"
           avatar={<ArtistAvatar />}
           description="Deep House"
-          value="1,568,604"
+          value={1568604}
         />
       </div>
     </>

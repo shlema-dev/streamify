@@ -1,4 +1,7 @@
+"use client";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CountAnimation } from "../ui/CountAnimation";
 
 interface ArtistCardProps {
   title: string;
@@ -6,7 +9,7 @@ interface ArtistCardProps {
   artist: string;
   description: string;
   avatar: React.ReactNode;
-  value: string;
+  value: number;
 }
 
 export default function ArtistCard({
@@ -36,7 +39,9 @@ export default function ArtistCard({
               <p className="text-sm text-muted-foreground">{description}</p>
             </div>
           </div>
-          <p className="text-2xl text-primary font-bold">{value} streams</p>
+          <p className="text-2xl text-primary font-bold">
+            <CountAnimation endValue={value} /> streams
+          </p>
           <p className="text-sm text-muted-foreground"></p>
         </div>
       </CardContent>

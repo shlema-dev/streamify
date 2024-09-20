@@ -47,15 +47,18 @@ const chartConfig = {
 export function UserGrowthChart() {
   return (
     <div>
-      <Card className="border-none">
+      <Card className="border-none max-h-[500px]">
         <CardHeader>
-          <CardTitle>User History</CardTitle>
+          <CardTitle>User Growth</CardTitle>
           <CardDescription>
             Total and Active users in the past 12 months
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <ChartContainer className="min-h-[200px] w-full" config={chartConfig}>
+          <ChartContainer
+            className="min-h-[200px] max-h-[300px] w-full"
+            config={chartConfig}
+          >
             <AreaChart
               accessibilityLayer
               data={chartData}
@@ -76,6 +79,8 @@ export function UserGrowthChart() {
                 cursor={false}
                 content={<ChartTooltipContent indicator="line" />}
               />
+
+              {/* Create gradients for chart fill */}
               <defs>
                 <linearGradient id="fillTotal" x1="0" y1="0" x2="0" y2="1">
                   <stop
@@ -102,6 +107,7 @@ export function UserGrowthChart() {
                   />
                 </linearGradient>
               </defs>
+
               <Area
                 dataKey="activeUsers"
                 type="natural"
