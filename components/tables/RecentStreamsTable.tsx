@@ -175,7 +175,7 @@ export default function RecentStreamsTable() {
   const [sortType, setSortType] = useState<"date" | "count">("date");
   const [filters, setFilters] = useState({
     artist: true,
-    songName: false,
+    songName: true,
   });
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
