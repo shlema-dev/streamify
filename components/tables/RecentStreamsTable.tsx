@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import {
   Table,
   TableBody,
@@ -26,152 +20,17 @@ import {
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { ListFilter, File } from "lucide-react";
-import { useState } from "react";
-
-const recentStreams = [
-  {
-    songName: "Subtle",
-    artist: "Low Key",
-    dateStreamed: "2024-09-01",
-    streamCount: 123452,
-    userId: "1",
-  },
-  {
-    songName: "Ramble",
-    artist: "Zed Leppelin",
-    dateStreamed: "2024-09-05",
-    streamCount: 164574,
-    userId: "2",
-  },
-  {
-    songName: "Creator",
-    artist: "Big Dawg",
-    dateStreamed: "2024-08-20",
-    streamCount: 47473,
-    userId: "1",
-  },
-  {
-    songName: "Rip Tide",
-    artist: "Beach Town",
-    dateStreamed: "2024-09-09",
-    streamCount: 3772,
-    userId: "4",
-  },
-  {
-    songName: "Dreamy Vibes",
-    artist: "Luna",
-    dateStreamed: "2024-08-10",
-    streamCount: 28456,
-    userId: "5",
-  },
-  {
-    songName: "Beat the Sun",
-    artist: "Sonic Wave",
-    dateStreamed: "2024-09-04",
-    streamCount: 13457,
-    userId: "3",
-  },
-  {
-    songName: "Chillwave",
-    artist: "Echoes",
-    dateStreamed: "2024-08-31",
-    streamCount: 27347,
-    userId: "2",
-  },
-  {
-    songName: "Night Drive",
-    artist: "Roadtrip",
-    dateStreamed: "2024-09-08",
-    streamCount: 45741,
-    userId: "8",
-  },
-  {
-    songName: "Summer Breeze",
-    artist: "Tropix",
-    dateStreamed: "2024-08-05",
-    streamCount: 84531,
-    userId: "9",
-  },
-  {
-    songName: "Lost in Space",
-    artist: "Beatz",
-    dateStreamed: "2024-09-02",
-    streamCount: 135883,
-    userId: "6",
-  },
-  {
-    songName: "Funky Groove",
-    artist: "The Vibes",
-    dateStreamed: "2024-09-10",
-    streamCount: 34576,
-    userId: "10",
-  },
-  {
-    songName: "Downtown Hustle",
-    artist: "City Lights",
-    dateStreamed: "2024-08-29",
-    streamCount: 234645,
-    userId: "11",
-  },
-  {
-    songName: "Ocean Waves",
-    artist: "SeaSounds",
-    dateStreamed: "2024-09-07",
-    streamCount: 23464,
-    userId: "7",
-  },
-  {
-    songName: "Street Beats",
-    artist: "Block Party",
-    dateStreamed: "2024-08-27",
-    streamCount: 2774,
-    userId: "12",
-  },
-  {
-    songName: "Electro Bounce",
-    artist: "Zed",
-    dateStreamed: "2024-08-23",
-    streamCount: 86546,
-    userId: "13",
-  },
-  {
-    songName: "City Life",
-    artist: "Uptown",
-    dateStreamed: "2024-09-03",
-    streamCount: 42457,
-    userId: "14",
-  },
-  {
-    songName: "Golden Hour",
-    artist: "Sunset",
-    dateStreamed: "2024-08-30",
-    streamCount: 45689,
-    userId: "15",
-  },
-  {
-    songName: "Electric Dreams",
-    artist: "Synthwave",
-    dateStreamed: "2024-09-06",
-    streamCount: 59775,
-    userId: "16",
-  },
-  {
-    songName: "Moonlit Road",
-    artist: "Nocturne",
-    dateStreamed: "2024-08-12",
-    streamCount: 53484,
-    userId: "17",
-  },
-  {
-    songName: "Festival Lights",
-    artist: "DJ Sparks",
-    dateStreamed: "2024-08-25",
-    streamCount: 35495,
-    userId: "18",
-  },
-];
+import { useState, useMemo } from "react";
+import useFetch from "@/app/api/useFetch";
+import SkeletonRecentStreams from "./SkeletonRecentStreams";
 
 export default function RecentStreamsTable() {
+  const {
+    data: recentStreams,
+    isPending,
+    error,
+  } = useFetch("http://localhost:8000/recentStreams");
+
   const [sortType, setSortType] = useState<"date" | "count">("date");
   const [filters, setFilters] = useState({
     artist: true,
@@ -180,29 +39,39 @@ export default function RecentStreamsTable() {
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const sortedStreams = [...recentStreams].sort((a, b) => {
-    if (sortType === "date") {
-      return (
-        new Date(b.dateStreamed).getTime() - new Date(a.dateStreamed).getTime()
-      );
-    } else {
-      return b.streamCount - a.streamCount;
-    }
-  });
+  const sortedAndFilteredStreams = useMemo(() => {
+    if (!recentStreams) return [];
 
-  const filteredStreams = sortedStreams.filter((stream) => {
-    if (filters.artist && filters.songName) return true;
-    if (filters.artist) return stream.artist;
-    if (filters.songName) return stream.songName;
-    return true;
-  });
+    let sorted = [...recentStreams].sort((a, b) => {
+      if (sortType === "date") {
+        return (
+          new Date(b.dateStreamed).getTime() -
+          new Date(a.dateStreamed).getTime()
+        );
+      } else {
+        return b.streamCount - a.streamCount;
+      }
+    });
 
-  const totalPages = Math.ceil(filteredStreams.length / itemsPerPage);
+    return sorted.filter((stream) => {
+      if (filters.artist && filters.songName) return true;
+      if (filters.artist) return stream.artist;
+      if (filters.songName) return stream.songName;
+      return false;
+    });
+  }, [recentStreams, sortType, filters]);
 
-  const paginatedStreams = filteredStreams.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  const totalPages = Math.ceil(sortedAndFilteredStreams.length / itemsPerPage);
+
+  const paginatedStreams = useMemo(() => {
+    return sortedAndFilteredStreams.slice(
+      (currentPage - 1) * itemsPerPage,
+      currentPage * itemsPerPage
+    );
+  }, [sortedAndFilteredStreams, currentPage, itemsPerPage]);
+
+  if (isPending) return <SkeletonRecentStreams />;
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <div className="w-full mt-8">
@@ -291,9 +160,12 @@ export default function RecentStreamsTable() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {paginatedStreams.map((stream) => {
+                  {paginatedStreams.map((stream, index) => {
                     return (
-                      <TableRow className="bg-accent border-b border-primary/20">
+                      <TableRow
+                        key={index}
+                        className="bg-accent border-b border-primary/20"
+                      >
                         <TableCell>
                           <div className="font-medium">
                             {stream.dateStreamed}

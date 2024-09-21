@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { CountAnimation } from "../ui/CountAnimation";
+import { CountAnimation } from "@/components/ui/CountAnimation";
 
 interface MetricsCardProps {
   title: string;

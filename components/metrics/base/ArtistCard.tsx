@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CountAnimation } from "../ui/CountAnimation";
+import { CountAnimation } from "../../ui/CountAnimation";
 
 interface ArtistCardProps {
   title: string;
