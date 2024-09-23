@@ -1,11 +1,10 @@
 "use client";
-import { TrendingUp } from "lucide-react";
+
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -13,16 +12,9 @@ import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
-  ChartTooltipContent,
 } from "@/components/ui/chart";
+import useFetch from "@/app/api/useFetch";
 
-const chartData = [
-  { name: "Beach Trance", streams: 340396 },
-  { name: "Drop Shop", streams: 332993 },
-  { name: "Space Shuttle", streams: 544403 },
-  { name: "Lost Symbol", streams: 457885 },
-  { name: "Mellow Beats", streams: 427934 },
-];
 const chartConfig = {
   song: {
     label: "Song",
@@ -31,6 +23,12 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function TopSongsChart() {
+  const {
+    data: chartData,
+    isPending,
+    error,
+  } = useFetch("http://localhost:8000/topSongs");
+
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
@@ -44,12 +42,22 @@ export function TopSongsChart() {
     return null;
   };
 
+  if (error) return <p>Error: {error}</p>;
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Top Songs</CardTitle>
-        <CardDescription>Most streamed songs in last 30 days</CardDescription>
-      </CardHeader>
+    <Card className="border-none">
+      {isPending ? (
+        <CardHeader>
+          <div className="h-6 w-1/3 bg-foreground/20 rounded animate-pulse"></div>
+          <div className="h-3 w-2/3 bg-foreground/20 rounded mt-2 animate-pulse"></div>
+        </CardHeader>
+      ) : (
+        <CardHeader>
+          <CardTitle>Top Songs</CardTitle>
+          <CardDescription>Most streamed songs in last 30 days</CardDescription>
+        </CardHeader>
+      )}
+
       <CardContent>
         <ChartContainer config={chartConfig}>
           <BarChart accessibilityLayer data={chartData}>

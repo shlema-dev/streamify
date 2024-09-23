@@ -18,21 +18,16 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import useFetch from "@/app/api/useFetch";
+import { useEffect, useState } from "react";
+import { getMonthName } from "@/lib/utils";
 
-const chartData = [
-  { month: "October", totalUsers: 200, activeUsers: 120 },
-  { month: "November", totalUsers: 198, activeUsers: 106 },
-  { month: "December", totalUsers: 309, activeUsers: 180 },
-  { month: "January", totalUsers: 412, activeUsers: 202 },
-  { month: "February", totalUsers: 448, activeUsers: 220 },
-  { month: "March", totalUsers: 433, activeUsers: 194 },
-  { month: "April", totalUsers: 554, activeUsers: 300 },
-  { month: "May", totalUsers: 621, activeUsers: 325 },
-  { month: "June", totalUsers: 659, activeUsers: 350 },
-  { month: "July", totalUsers: 743, activeUsers: 319 },
-  { month: "August", totalUsers: 781, activeUsers: 449 },
-  { month: "September", totalUsers: 800, activeUsers: 593 },
-];
+interface MonthObject {
+  month: string;
+  totalUsers: number;
+  activeUsers: number;
+}
+
 const chartConfig = {
   totalUsers: {
     label: "Total",
@@ -45,15 +40,44 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function UserGrowthChart() {
+  const [formattedData, setFormattedData] = useState<MonthObject[]>([]);
+
+  const {
+    data: chartData,
+    isPending,
+    error,
+  } = useFetch("http://localhost:8000/userGrowth");
+
+  useEffect(() => {
+    if (!chartData) return;
+
+    const formattedData = chartData.map((chart: MonthObject) => ({
+      ...chart,
+      month: getMonthName(chart.month),
+    }));
+
+    setFormattedData(formattedData);
+  }, [chartData]);
+
+  if (error) return <p>Error: {error}</p>;
+
   return (
     <div>
       <Card className="border-none max-h-[500px]">
-        <CardHeader>
-          <CardTitle>User Growth</CardTitle>
-          <CardDescription>
-            Total and Active users in the past 12 months
-          </CardDescription>
-        </CardHeader>
+        {isPending ? (
+          <CardHeader>
+            <div className="h-5 w-1/3 bg-muted-foreground/20 rounded-md animate-pulse"></div>
+            <div className="h-[14px] w-2/3 bg-muted-foreground/20 rounded-md mt-2 animate-pulse"></div>
+          </CardHeader>
+        ) : (
+          <CardHeader>
+            <CardTitle>User Growth</CardTitle>
+            <CardDescription>
+              Total and Active users in the past 12 months
+            </CardDescription>
+          </CardHeader>
+        )}
+
         <CardContent>
           <ChartContainer
             className="min-h-[200px] max-h-[300px] w-full"
@@ -61,7 +85,7 @@ export function UserGrowthChart() {
           >
             <AreaChart
               accessibilityLayer
-              data={chartData}
+              data={formattedData}
               margin={{
                 left: 12,
                 right: 12,
@@ -128,18 +152,29 @@ export function UserGrowthChart() {
             </AreaChart>
           </ChartContainer>
         </CardContent>
-        <CardFooter>
-          <div className="flex w-full items-start gap-2 text-sm">
-            <div className="grid gap-2">
-              <div className="flex items-center gap-2 font-medium leading-none">
-                Trending up by 237% this year <TrendingUp className="h-4 w-4" />
-              </div>
-              <div className="flex items-center gap-2 leading-none text-muted-foreground">
-                September 2023 - September 2024
+
+        {isPending ? (
+          <CardFooter>
+            <div className="flex flex-col gap-2 w-full items-start animate-pulse">
+              <div className="h-4 w-1/3 bg-muted-foreground/20 rounded-md"></div>
+              <div className="h-4 w-1/3 bg-muted-foreground/20 rounded-md"></div>
+            </div>
+          </CardFooter>
+        ) : (
+          <CardFooter>
+            <div className="flex w-full items-start gap-2 text-sm">
+              <div className="grid gap-2">
+                <div className="flex items-center gap-2 font-medium leading-none">
+                  Trending up by 237% this year{" "}
+                  <TrendingUp className="h-4 w-4" />
+                </div>
+                <div className="flex items-center gap-2 leading-none text-muted-foreground">
+                  September 2023 - September 2024
+                </div>
               </div>
             </div>
-          </div>
-        </CardFooter>
+          </CardFooter>
+        )}
       </Card>
     </div>
   );

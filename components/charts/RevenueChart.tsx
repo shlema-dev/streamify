@@ -1,5 +1,5 @@
 "use client";
-import * as React from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Label, Pie, PieChart, Sector } from "recharts";
 import { PieSectorDataItem } from "recharts/types/polar/Pie";
 import {
@@ -23,20 +23,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import useFetch from "@/app/api/useFetch";
 export const description = "An interactive pie chart";
 
-const revenueData = [
-  {
-    source: "Subscriptions",
-    amount: 5445358,
-    fill: "url(#gradientSubscriptions)",
-  },
-  {
-    source: "Advertisements",
-    amount: 9723475,
-    fill: "url(#gradientAdvertisements)",
-  },
-];
+// const revenueData = [
+//   {
+//     source: "Subscriptions",
+//     amount: 5445358,
+//     fill: "url(#gradientSubscriptions)",
+//   },
+//   {
+//     source: "Ads",
+//     amount: 9723475,
+//     fill: "url(#gradientAdvertisements)",
+//   },
+// ];
+
 const chartConfig = {
   visitors: {
     label: "Visitors",
@@ -48,7 +50,7 @@ const chartConfig = {
     label: "Subscriptions",
     color: "hsl(var(--chart-1))",
   },
-  Advertisements: {
+  Ads: {
     label: "Advertisements",
     color: "hsl(var(--chart-2))",
   },
@@ -56,14 +58,48 @@ const chartConfig = {
 
 export function RevenueChart() {
   const id = "pie-interactive";
-  const [activeSource, setActiveSource] = React.useState(revenueData[0].source);
-  const activeIndex = React.useMemo(
-    () => revenueData.findIndex((item) => item.source === activeSource),
-    [activeSource]
+  const {
+    data: fetchedRevenueData,
+    isPending,
+    error,
+  } = useFetch("http://localhost:8000/revenue");
+
+  const [revenueData, setRevenueData] = useState<
+    { source: string; amount: number; fill: string }[]
+  >([]);
+  const [activeSource, setActiveSource] = useState<string | undefined>(
+    undefined
   );
-  const sources = React.useMemo(
-    () => revenueData.map((item) => item.source),
-    []
+
+  useEffect(() => {
+    if (!fetchedRevenueData) return;
+
+    const updatedData = fetchedRevenueData.map(
+      (item: { source: string; amount: number }) => {
+        let fill = "";
+        if (item.source === "Subscriptions") {
+          fill = "url(#gradientSubscriptions)";
+        } else {
+          fill = "url(#gradientAdvertisements)";
+        }
+        return { ...item, fill };
+      }
+    );
+
+    setRevenueData(updatedData);
+    setActiveSource("Subscriptions");
+  }, [fetchedRevenueData]);
+
+  const activeIndex = useMemo(
+    () =>
+      revenueData && activeSource
+        ? revenueData.findIndex((item: any) => item.source === activeSource)
+        : 0,
+    [revenueData, activeSource]
+  );
+  const sources = useMemo(
+    () => (revenueData ? revenueData.map((item: any) => item.source) : []),
+    [revenueData]
   );
 
   const handlePieClick = (data: any, index: number) => {
@@ -83,50 +119,59 @@ export function RevenueChart() {
     return null;
   };
 
+  if (error) return <p>Error: {error}</p>;
+
   return (
     <Card data-chart={id} className="flex flex-col border-none">
       <ChartStyle id={id} config={chartConfig} />
 
-      <CardHeader className="flex-row items-start space-y-0 pb-0">
-        <div className="grid gap-1">
-          <CardTitle>Revenue Distribution</CardTitle>
-          <CardDescription>September 2023 - September 2024</CardDescription>
-        </div>
-        {/* Dropdown selector for revenue type */}
-        <Select value={activeSource} onValueChange={setActiveSource}>
-          <SelectTrigger
-            className="ml-auto h-7 w-[130px] rounded-lg pl-2.5"
-            aria-label="Select a source"
-          >
-            <SelectValue placeholder="Select source" />
-          </SelectTrigger>
-          <SelectContent align="end" className="rounded-xl">
-            {sources.map((key) => {
-              const config = chartConfig[key as keyof typeof chartConfig];
-              if (!config) {
-                return null;
-              }
-              return (
-                <SelectItem
-                  key={key}
-                  value={key}
-                  className="rounded-lg [&_span]:flex"
-                >
-                  <div className="flex items-center gap-2 text-xs">
-                    <span
-                      className="flex h-3 w-3 shrink-0 rounded-md"
-                      style={{
-                        backgroundColor: `var(--color-${key})`,
-                      }}
-                    />
-                    {config?.label}
-                  </div>
-                </SelectItem>
-              );
-            })}
-          </SelectContent>
-        </Select>
-      </CardHeader>
+      {isPending ? (
+        <CardHeader>
+          <div className="h-4 w-1/3 bg-foreground/20 rounded animate-pulse"></div>
+          <div className="h-3 w-2/3 bg-foreground/20 rounded mt-2 animate-pulse"></div>
+        </CardHeader>
+      ) : (
+        <CardHeader className="flex-row items-start space-y-0 pb-0">
+          <div className="grid gap-1">
+            <CardTitle>Revenue Distribution</CardTitle>
+            <CardDescription>September 2023 - September 2024</CardDescription>
+          </div>
+          {/* Dropdown selector for revenue type */}
+          <Select value={activeSource} onValueChange={setActiveSource}>
+            <SelectTrigger
+              className="ml-auto h-7 w-[130px] rounded-lg pl-2.5"
+              aria-label="Select a source"
+            >
+              <SelectValue placeholder="Select source" />
+            </SelectTrigger>
+            <SelectContent align="end" className="rounded-xl">
+              {sources.map((key: any) => {
+                const config = chartConfig[key as keyof typeof chartConfig];
+                if (!config) {
+                  return null;
+                }
+                return (
+                  <SelectItem
+                    key={key}
+                    value={key}
+                    className="rounded-lg [&_span]:flex"
+                  >
+                    <div className="flex items-center gap-2 text-xs">
+                      <span
+                        className="flex h-3 w-3 shrink-0 rounded-md"
+                        style={{
+                          backgroundColor: `var(--color-${key})`,
+                        }}
+                      />
+                      {config?.label}
+                    </div>
+                  </SelectItem>
+                );
+              })}
+            </SelectContent>
+          </Select>
+        </CardHeader>
+      )}
 
       <CardContent className="flex flex-1 justify-center pb-0">
         <ChartContainer
@@ -164,12 +209,12 @@ export function RevenueChart() {
               >
                 <stop
                   offset="5%"
-                  stopColor={chartConfig.Advertisements.color}
+                  stopColor={chartConfig.Ads.color}
                   stopOpacity={0.8}
                 />
                 <stop
                   offset="95%"
-                  stopColor={chartConfig.Advertisements.color}
+                  stopColor={chartConfig.Ads.color}
                   stopOpacity={0.1}
                 />
               </linearGradient>

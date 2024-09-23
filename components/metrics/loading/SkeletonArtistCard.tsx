@@ -16,7 +16,7 @@ export default function SkeletonArtistCard() {
             <div className="text-muted-foreground">
               <div className="w-6 h-6 bg-muted-foreground/20 rounded-full"></div>
             </div>
-            <p className="w-32 h-5 bg-muted-foreground/20 rounded-md"></p>
+            <p className="w-32 h-[26px] bg-muted-foreground/20 rounded-md"></p>
           </div>
         </CardTitle>
         <CardDescription className="w-48 h-4 bg-muted-foreground/20 rounded-md"></CardDescription>

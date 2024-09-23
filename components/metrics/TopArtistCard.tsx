@@ -1,11 +1,10 @@
 "use client";
 
 import useFetch from "@/app/api/useFetch";
-import SkeletonMetricsCard from "./loading/SkeletonMetricsCard";
-import MetricsCard from "./base/MetricsCard";
-import { Trophy, Users } from "lucide-react";
+import { Trophy } from "lucide-react";
 import ArtistCard from "./base/ArtistCard";
 import { ArtistAvatar } from "../ArtistAvatar";
+import SkeletonArtistCard from "./loading/SkeletonArtistCard";
 
 export default function TopArtistCard() {
   const {
@@ -14,7 +13,7 @@ export default function TopArtistCard() {
     error,
   } = useFetch("http://localhost:8000/topArtist");
 
-  if (isPending) return <SkeletonMetricsCard />;
+  if (isPending) return <SkeletonArtistCard />;
   if (error) return <p>Error: {error}</p>;
 
   return (

@@ -13,3 +13,9 @@ export function getInitials(name: string) {
 
   return `${first}${last}`;
 }
+
+export function getMonthName(dateString: string): string {
+  const [year, month] = dateString.split("-").map(Number);
+  const date = new Date(year, month - 1); // month is 0-indexed in JS Date
+  return date.toLocaleString("default", { month: "long" });
+}

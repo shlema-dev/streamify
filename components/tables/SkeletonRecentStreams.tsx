@@ -15,19 +15,19 @@ import { ListFilter, File } from "lucide-react";
 const SkeletonRecentStreams = () => {
   return (
     <div className="w-full mt-8 animate-pulse">
-      <h1 className="text-2xl font-bold mb-6 bg-popover/50 h-8 w-48 rounded"></h1>
+      <h1 className="text-2xl font-bold mb-6">Recent Streams</h1>
       <Tabs defaultValue="date">
-        <div className="flex items-center">
+        <div className="flex flex-wrap items-center gap-2">
           <TabsList>
             <TabsTrigger
               value="date"
-              className="bg-popover/50 text-transparent"
+              className="bg-foreground/20 text-transparent"
             >
               Date
             </TabsTrigger>
             <TabsTrigger
               value="count"
-              className="bg-popover/50 text-transparent"
+              className="bg-foreground/20 text-transparent"
             >
               Count
             </TabsTrigger>
@@ -37,7 +37,7 @@ const SkeletonRecentStreams = () => {
             <Button
               variant="outline"
               size="sm"
-              className="h-7 gap-1 text-sm bg-popover/50"
+              className="h-7 gap-1 text-sm bg-foreground/20"
             >
               <ListFilter className="h-3.5 w-3.5 text-transparent" />
               <span className="sr-only sm:not-sr-only text-transparent">
@@ -47,7 +47,7 @@ const SkeletonRecentStreams = () => {
             <Button
               size="sm"
               variant="outline"
-              className="h-7 gap-1 text-sm bg-popover/50"
+              className="h-7 gap-1 text-sm bg-foreground/20"
             >
               <File className="h-3.5 w-3.5 text-transparent" />
               <span className="sr-only sm:not-sr-only text-transparent">
@@ -59,17 +59,17 @@ const SkeletonRecentStreams = () => {
         <TabsContent value="date">
           <Card className="border-none mt-4">
             <CardHeader className="px-7">
-              <CardTitle className="bg-popover/50 h-6 w-64 rounded"></CardTitle>
+              <CardTitle className="bg-foreground/20 h-8 w-3/4 max-w-[16rem] rounded"></CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="bg-popover/50 h-6 w-20 rounded"></TableHead>
-                    <TableHead className="bg-popover/50 h-6 w-24 rounded hidden sm:table-cell"></TableHead>
-                    <TableHead className="bg-popover/50 h-6 w-24 rounded"></TableHead>
-                    <TableHead className="bg-popover/50 h-6 w-16 rounded"></TableHead>
-                    <TableHead className="bg-popover/50 h-6 w-16 rounded text-right"></TableHead>
+                    <TableHead className="bg-foreground/20 h-6 w-1/5 rounded"></TableHead>
+                    <TableHead className="bg-foreground/20 h-6 w-1/5 rounded hidden sm:table-cell"></TableHead>
+                    <TableHead className="bg-foreground/20 h-6 w-1/5 rounded"></TableHead>
+                    <TableHead className="bg-foreground/20 h-6 w-1/5 rounded"></TableHead>
+                    <TableHead className="bg-foreground/20 h-6 w-1/5 rounded text-right"></TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -79,19 +79,19 @@ const SkeletonRecentStreams = () => {
                       className="bg-accent border-b border-primary/20"
                     >
                       <TableCell>
-                        <div className="bg-popover/50 h-5 w-24 rounded"></div>
+                        <div className="bg-foreground/20 h-5 w-full rounded"></div>
                       </TableCell>
                       <TableCell className="hidden sm:table-cell">
-                        <div className="bg-popover/50 h-5 w-32 rounded"></div>
+                        <div className="bg-foreground/20 h-5 w-full rounded"></div>
                       </TableCell>
                       <TableCell>
-                        <div className="bg-popover/50 h-5 w-32 rounded"></div>
+                        <div className="bg-foreground/20 h-5 w-full rounded"></div>
                       </TableCell>
                       <TableCell>
-                        <div className="bg-popover/50 h-5 w-16 rounded"></div>
+                        <div className="bg-foreground/20 h-5 w-full rounded"></div>
                       </TableCell>
                       <TableCell className="text-right">
-                        <div className="bg-popover/50 h-5 w-8 rounded ml-auto"></div>
+                        <div className="bg-foreground/20 h-5 w-full rounded"></div>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -102,12 +102,12 @@ const SkeletonRecentStreams = () => {
         </TabsContent>
       </Tabs>
 
-      <div className="flex justify-between items-center mt-4">
+      <div className="flex flex-wrap justify-between items-center mt-4 gap-2">
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
             size="sm"
-            className="h-7 gap-1 text-sm bg-popover/50 text-transparent"
+            className="h-7 gap-1 text-sm bg-foreground/20 text-transparent"
           >
             Items per page: 5
           </Button>
@@ -117,15 +117,15 @@ const SkeletonRecentStreams = () => {
           <Button
             size="sm"
             variant="outline"
-            className="bg-popover/50 text-transparent"
+            className="bg-foreground/20 text-transparent"
           >
             Previous
           </Button>
-          <span className="text-sm bg-popover/50 h-5 w-24 rounded"></span>
+          <span className="text-sm bg-foreground/20 h-5 w-24 rounded"></span>
           <Button
             size="sm"
             variant="outline"
-            className="bg-popover/50 text-transparent"
+            className="bg-foreground/20 text-transparent"
           >
             Next
           </Button>
